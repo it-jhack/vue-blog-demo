@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-primary text-white">
+    <q-header class="bg-primary text-white">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
@@ -8,8 +8,16 @@
           <q-avatar>
             <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
           </q-avatar>
-          Title
         </q-toolbar-title>
+
+        <q-space />
+
+        <q-btn
+          flat
+          round
+          :icon="isDark ? 'sym_o_dark_mode' : 'light_mode'"
+          @click="toggleDarkMode"
+        />
       </q-toolbar>
     </q-header>
 
@@ -33,17 +41,43 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { useQuasar } from 'quasar'
 
 export default {
   setup() {
+    const $q = useQuasar()
     const leftDrawerOpen = ref(false)
+    const isDark = ref(false)
+
+    const toggleDarkMode = () => {
+      isDark.value = !isDark.value
+      $q.dark.set(isDark.value)
+      localStorage.setItem('darkMode', isDark.value)
+    }
+
+    onMounted(() => {
+      const storedDarkMode = localStorage.getItem('darkMode')
+      if (storedDarkMode === null) {
+        // Use browser preference if no stored preference
+        isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+      } else {
+        isDark.value = storedDarkMode === 'true'
+      }
+      $q.dark.set(isDark.value)
+    })
+
+    watch(isDark, (newValue) => {
+      $q.dark.set(newValue)
+    })
 
     return {
       leftDrawerOpen,
+      isDark,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
+      toggleDarkMode,
     }
   },
 }
