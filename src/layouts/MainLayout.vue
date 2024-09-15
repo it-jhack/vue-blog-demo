@@ -36,7 +36,7 @@
             <q-icon name="sym_o_newsmode" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Blog</q-item-label>
+            <q-item-label>Blog (CRUD Example)</q-item-label>
           </q-item-section>
         </q-item>
         <q-item to="/about" exact>
