@@ -2,10 +2,24 @@
   <q-page padding>
     <div class="content-container">
       <h1 class="text-h2 q-mb-md text-center">Welcome</h1>
-      <p class="q-mb-xl">
+      <p class="q-my-lg">
         This is an application built with Vue 3 and Quasar Framework. It was
         built with no end in mind, really. Just having some fun configuring the
         framework from scratch and showcasing some neat quasar components 😁
+      </p>
+
+      <p class="q-my-lg">
+        This app features a seamless dark mode integration, it initially sets
+        itself to the browser preference on the first acces but also allowing
+        users to switch between light and dark themes effortlessly.
+      </p>
+
+      <p class="q-my-lg">
+        Additionally, I've implemented a consistent design system using Quasar's
+        variables.sass file, ensuring a cohesive look and feel across the entire
+        application. This approach allows for easy customization of colors,
+        typography, and other design elements while maintaining a unified
+        aesthetic.
       </p>
 
       <div class="text-center">
