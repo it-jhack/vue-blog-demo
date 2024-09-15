@@ -22,7 +22,7 @@
     </q-header>
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
-      <q-list>
+      <q-list class="q-mt-lg">
         <q-item to="/" exact>
           <q-item-section avatar>
             <q-icon name="sym_o_home" />
