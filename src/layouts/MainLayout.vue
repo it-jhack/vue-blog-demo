@@ -23,12 +23,28 @@
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <q-list>
-        <q-item to="/blog" exact>
+        <q-item to="/" exact>
           <q-item-section avatar>
             <q-icon name="sym_o_home" />
           </q-item-section>
           <q-item-section>
+            <q-item-label>Home Page</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item to="/blog" exact>
+          <q-item-section avatar>
+            <q-icon name="sym_o_newsmode" />
+          </q-item-section>
+          <q-item-section>
             <q-item-label>Blog</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item to="/about" exact>
+          <q-item-section avatar>
+            <q-icon name="sym_o_help" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>About</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
