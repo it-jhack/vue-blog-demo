@@ -25,7 +25,7 @@
       >
         <q-item-section>
           <q-item-label class="text-h6">{{ post.title }}</q-item-label>
-          <q-item-label caption>{{ post.date }}</q-item-label>
+          <q-item-label caption>{{ formatDate(post.date) }}</q-item-label>
           <q-item-label class="q-mt-sm">{{ post.excerpt }}</q-item-label>
         </q-item-section>
       </q-item>
@@ -86,12 +86,20 @@ function onSubmit() {
     title: newPost.value.title,
     excerpt: newPost.value.excerpt,
     content: newPost.value.content,
-    date: new Date().toLocaleDateString(),
+    date: new Date().toISOString(),
   })
 
   showDialog.value = false
 
   newPost.value = { title: '', excerpt: '', content: '' }
+}
+
+function formatDate(isoDate) {
+  return new Date(isoDate).toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })
 }
 </script>
 
