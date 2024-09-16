@@ -54,6 +54,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { createHash } from 'crypto'
 
 const blogPosts = ref([])
 const showDialog = ref(false)
@@ -63,20 +64,26 @@ const newPost = ref({
   content: '',
 })
 
-const openDialog = () => {
+function openDialog() {
   showDialog.value = true
 }
 
-const onSubmit = () => {
+function generateId(title) {
+  const timestamp = Date.now().toString()
+  const hash = createHash('sha256').update(timestamp).digest('hex')
+  const sanitizedTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+  return `${hash.slice(0, 5)}-${sanitizedTitle}`
+}
+
+function onSubmit() {
   blogPosts.value.push({
-    id: Date.now(),
+    id: generateId(newPost.value.title),
     title: newPost.value.title,
     excerpt: newPost.value.excerpt,
     content: newPost.value.content,
     date: new Date().toLocaleDateString(),
   })
 
-  console.log('New post added:', newPost.value)
   showDialog.value = false
 
   newPost.value = { title: '', excerpt: '', content: '' }
