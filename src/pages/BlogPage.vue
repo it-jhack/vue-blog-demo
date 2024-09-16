@@ -12,20 +12,23 @@
       />
     </div>
 
-    <div v-if="blogPosts.length === 0">
+    <div v-if="blogStore.blogPosts.length === 0">
       <p class="text-h5 text-center q-mt-lg">No articles yet</p>
     </div>
     <q-list v-else separator>
       <q-item
-        v-for="post in blogPosts"
+        v-for="post in blogStore.blogPosts"
         :key="post.id"
         clickable
         v-ripple
         class="blog-item q-mb-sm"
+        @click="goToPost(post.id)"
       >
         <q-item-section>
           <q-item-label class="text-h6">{{ post.title }}</q-item-label>
-          <q-item-label caption>{{ formatDate(post.date) }}</q-item-label>
+          <q-item-label caption>{{
+            blogStore.formatDate(post.date)
+          }}</q-item-label>
           <q-item-label class="q-mt-sm">{{ post.excerpt }}</q-item-label>
         </q-item-section>
       </q-item>
@@ -60,8 +63,9 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useBlogStore } from '../stores/useBlogStore'
 
-const blogPosts = ref([])
 const showDialog = ref(false)
 const newPost = ref({
   title: '',
@@ -69,37 +73,26 @@ const newPost = ref({
   content: '',
 })
 
+const router = useRouter()
+const blogStore = useBlogStore()
+
 function openDialog() {
   showDialog.value = true
 }
 
-function generateId(title) {
-  const timestamp = Date.now().toString(36)
-  const randomStr = Math.random().toString(36).substring(2, 7)
-  const sanitizedTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-  return `${timestamp}-${randomStr}-${sanitizedTitle}`
-}
-
 function onSubmit() {
-  blogPosts.value.push({
-    id: generateId(newPost.value.title),
+  blogStore.createPost({
     title: newPost.value.title,
     excerpt: newPost.value.excerpt,
     content: newPost.value.content,
-    date: new Date().toISOString(),
   })
 
   showDialog.value = false
-
   newPost.value = { title: '', excerpt: '', content: '' }
 }
 
-function formatDate(isoDate) {
-  return new Date(isoDate).toLocaleDateString('en-US', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  })
+function goToPost(postId) {
+  router.push(`/post/${postId}`)
 }
 </script>
 

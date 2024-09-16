@@ -32,6 +32,15 @@
         platforms, without the need for separate mobile-specific versions.
       </p>
 
+      <p class="q-my-lg">
+        The project also incorporates Pinia, a state management solution for Vue
+        applications. Pinia offers a simple and intuitive API for managing
+        global state, making it easier to handle complex data flows and share
+        information between components. Its integration enhances the overall
+        architecture of the application, providing a robust and scalable
+        approach to state management.
+      </p>
+
       <div class="text-center">
         <q-btn
           color="primary"
