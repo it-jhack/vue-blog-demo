@@ -1,50 +1,81 @@
 <template>
   <q-page padding>
     <div class="content-container">
-      <h1 class="text-h2 q-mb-md text-center">Welcome</h1>
+      <h1 class="text-h2 q-mb-md text-center">Welcome!</h1>
+
       <p class="q-my-lg">
         This is an application built with Vue 3 and Quasar Framework. It was
         built with no end in mind, really. Just having some fun configuring the
         framework from scratch and showcasing some neat quasar components 😁
       </p>
 
-      <p class="q-my-lg">
-        This app features a seamless dark mode integration, it initially sets
-        itself to the browser preference on the first acces but also allowing
-        users to switch between light and dark themes effortlessly.
-      </p>
+      <q-list separator class="custom-list">
+        <q-item>
+          <q-item-section avatar>
+            <q-icon color="primary" name="sym_o_dark_mode" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label header class="custom-header"
+              >Seamless Dark Mode</q-item-label
+            >
+            <q-item-label caption>
+              Auto-detects browser preference and lets you switch themes on the
+              fly. Because who doesn't love a good dark mode?
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
-      <p class="q-my-lg">
-        Additionally, I've implemented a consistent design system using Quasar's
-        variables.sass file, ensuring a cohesive look and feel across the entire
-        application. This approach allows for easy customization of colors,
-        typography, and other design elements while maintaining a unified
-        aesthetic.
-      </p>
+        <q-item>
+          <q-item-section avatar>
+            <q-icon color="primary" name="sym_o_palette" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label header class="custom-header"
+              >Slick Design System</q-item-label
+            >
+            <q-item-label caption>
+              Built with Quasar's variables.sass for a cohesive look.
+              Customization made easy!
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
-      <p class="q-my-lg">
-        Furthermore, this application is seamlessly responsive, adapting fluidly
-        to various screen sizes and devices. Leveraging Quasar's built-in
-        responsive design system, the layout, components, and content
-        automatically adjust to provide an optimal user experience whether on
-        desktop, tablet, or mobile. This responsiveness ensures that the
-        application remains functional and visually appealing across all
-        platforms, without the need for separate mobile-specific versions.
-      </p>
+        <q-item>
+          <q-item-section avatar>
+            <q-icon color="primary" name="sym_o_devices" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label header class="custom-header"
+              >Responsive all the way!</q-item-label
+            >
+            <q-item-label caption>
+              Looks great on everything from your phone to your 4K monitor. No
+              separate mobile version needed!
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
-      <p class="q-my-lg">
-        The project also incorporates Pinia, a state management solution for Vue
-        applications. Pinia offers a simple and intuitive API for managing
-        global state, making it easier to handle complex data flows and share
-        information between components. Its integration enhances the overall
-        architecture of the application, providing a robust and scalable
-        approach to state management.
-      </p>
+        <q-item>
+          <q-item-section avatar>
+            <q-icon color="primary" name="sym_o_data_object" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label header class="custom-header"
+              >State-of-the-Art State Management</q-item-label
+            >
+            <q-item-label caption>
+              Powered by Pinia for smooth data flow. Because juggling state
+              shouldn't be a circus act.
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
 
-      <div class="text-center">
+      <div class="text-center q-mt-lg">
         <q-btn
           color="primary"
-          label="Check out the examples"
+          label="Dive into the Blog CRUD Example!"
+          no-caps
           icon="sym_o_article"
           size="lg"
           to="/blog"
@@ -65,5 +96,14 @@
 
 .text-center {
   text-align: center;
+}
+
+.custom-list .q-item__section--avatar {
+  min-width: 40px;
+}
+
+.custom-list .custom-header {
+  font-weight: bold;
+  padding-left: 0;
 }
 </style>

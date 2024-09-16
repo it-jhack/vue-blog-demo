@@ -60,14 +60,6 @@
             <q-item-label>Blog (CRUD Example)</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/about" exact>
-          <q-item-section avatar>
-            <q-icon name="sym_o_help" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>About</q-item-label>
-          </q-item-section>
-        </q-item>
       </q-list>
     </q-drawer>
 
