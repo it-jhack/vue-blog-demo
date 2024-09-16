@@ -22,6 +22,16 @@
         aesthetic.
       </p>
 
+      <p class="q-my-lg">
+        Furthermore, this application is seamlessly responsive, adapting fluidly
+        to various screen sizes and devices. Leveraging Quasar's built-in
+        responsive design system, the layout, components, and content
+        automatically adjust to provide an optimal user experience whether on
+        desktop, tablet, or mobile. This responsiveness ensures that the
+        application remains functional and visually appealing across all
+        platforms, without the need for separate mobile-specific versions.
+      </p>
+
       <div class="text-center">
         <q-btn
           color="primary"
