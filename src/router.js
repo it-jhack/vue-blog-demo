@@ -3,15 +3,34 @@ import MainLayout from './layouts/MainLayout.vue'
 import HomePage from './pages/HomePage.vue'
 import BlogPage from './pages/BlogPage.vue'
 import AboutPage from './pages/AboutPage.vue'
+import BlogPost from './components/BlogPost.vue'
 
 const routes = [
   {
     path: '/',
     component: MainLayout,
     children: [
-      { path: '', name: 'Home', component: HomePage },
-      { path: 'blog', name: 'Blog', component: BlogPage },
-      { path: 'about', name: 'About', component: AboutPage },
+      {
+        path: '',
+        name: 'home',
+        component: HomePage,
+      },
+      {
+        path: 'blog',
+        name: 'blog',
+        component: BlogPage,
+      },
+      {
+        path: 'blog/:postId',
+        name: 'blogPost',
+        component: BlogPost,
+        props: true,
+      },
+      {
+        path: 'about',
+        name: 'about',
+        component: AboutPage,
+      },
     ],
   },
 ]

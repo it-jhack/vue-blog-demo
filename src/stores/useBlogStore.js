@@ -29,9 +29,14 @@ export const useBlogStore = defineStore('blog', () => {
     })
   }
 
+  function getPostById(id) {
+    return this.blogPosts.find((post) => post.id === id)
+  }
+
   return {
     blogPosts,
     createPost,
     formatDate,
+    getPostById,
   }
 })

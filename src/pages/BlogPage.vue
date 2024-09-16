@@ -92,7 +92,7 @@ function onSubmit() {
 }
 
 function goToPost(postId) {
-  router.push(`/post/${postId}`)
+  router.push({ name: 'blogPost', params: { postId } })
 }
 </script>
 
