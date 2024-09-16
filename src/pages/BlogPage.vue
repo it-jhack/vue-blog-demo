@@ -195,8 +195,9 @@ function goToPost(postId) {
   display: none;
   position: absolute;
   right: 8px;
-  top: 50%;
+  top: 25px;
   transform: translateY(-50%);
+  flex-direction: row;
 }
 
 .blog-item:hover .action-buttons {
