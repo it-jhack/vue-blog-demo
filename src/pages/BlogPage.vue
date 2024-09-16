@@ -54,7 +54,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import { createHash } from 'crypto'
 
 const blogPosts = ref([])
 const showDialog = ref(false)
@@ -69,10 +68,10 @@ function openDialog() {
 }
 
 function generateId(title) {
-  const timestamp = Date.now().toString()
-  const hash = createHash('sha256').update(timestamp).digest('hex')
+  const timestamp = Date.now().toString(36)
+  const randomStr = Math.random().toString(36).substring(2, 7)
   const sanitizedTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-  return `${hash.slice(0, 5)}-${sanitizedTitle}`
+  return `${timestamp}-${randomStr}-${sanitizedTitle}`
 }
 
 function onSubmit() {
