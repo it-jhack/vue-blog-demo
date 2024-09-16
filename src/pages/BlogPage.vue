@@ -21,15 +21,19 @@
         :key="post.id"
         clickable
         v-ripple
-        class="blog-item q-mb-sm"
+        class="blog-item"
         @click="goToPost(post.id)"
       >
         <q-item-section>
           <q-item-label class="text-h6">{{ post.title }}</q-item-label>
-          <q-item-label caption>{{
-            blogStore.formatDate(post.date)
-          }}</q-item-label>
+          <q-item-label caption>
+            {{ blogStore.formatDate(post.date) }}
+          </q-item-label>
           <q-item-label class="q-mt-sm">{{ post.excerpt }}</q-item-label>
+        </q-item-section>
+        <q-item-section side class="action-buttons">
+          <q-btn flat round icon="edit" @click.stop="editPost(post)" />
+          <q-btn flat round icon="delete" @click.stop="confirmDelete(post)" />
         </q-item-section>
       </q-item>
     </q-list>
@@ -58,6 +62,52 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="showEditDialog">
+      <q-card style="width: 700px; max-width: 80vw">
+        <q-card-section>
+          <div class="text-h6">Edit Article</div>
+        </q-card-section>
+
+        <q-card-section>
+          <q-form @submit="onEditSubmit" class="q-gutter-md">
+            <q-input v-model="editingPost.title" label="Title" required />
+            <q-input v-model="editingPost.excerpt" label="Excerpt" required />
+            <q-editor
+              v-model="editingPost.content"
+              min-height="5rem"
+              label="Content"
+              required
+            />
+            <div>
+              <q-btn label="Update" type="submit" color="primary" />
+              <q-btn label="Cancel" flat class="q-ml-sm" v-close-popup />
+            </div>
+          </q-form>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="showDeleteDialog">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Confirm Deletion</div>
+        </q-card-section>
+        <q-card-section>
+          Are you sure you want to delete this post?
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" v-close-popup />
+          <q-btn
+            flat
+            label="Delete"
+            color="negative"
+            @click="deletePost"
+            v-close-popup
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -72,6 +122,11 @@ const newPost = ref({
   excerpt: '',
   content: '',
 })
+
+const showEditDialog = ref(false)
+const showDeleteDialog = ref(false)
+const editingPost = ref({})
+const postToDelete = ref(null)
 
 const router = useRouter()
 const blogStore = useBlogStore()
@@ -91,6 +146,28 @@ function onSubmit() {
   newPost.value = { title: '', excerpt: '', content: '' }
 }
 
+function editPost(post) {
+  editingPost.value = { ...post }
+  showEditDialog.value = true
+}
+
+function onEditSubmit() {
+  blogStore.updatePost(editingPost.value)
+  showEditDialog.value = false
+}
+
+function confirmDelete(post) {
+  postToDelete.value = post
+  showDeleteDialog.value = true
+}
+
+function deletePost() {
+  if (postToDelete.value) {
+    blogStore.deletePost(postToDelete.value.id)
+    postToDelete.value = null
+  }
+}
+
 function goToPost(postId) {
   router.push({ name: 'blogPost', params: { postId } })
 }
@@ -105,11 +182,24 @@ function goToPost(postId) {
 .blog-item {
   transition: all 0.3s ease;
   border: 1px solid transparent;
+  position: relative;
 }
 
 .blog-item:hover {
   border-radius: 8px;
   border-color: #e0e0e0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.action-buttons {
+  display: none;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.blog-item:hover .action-buttons {
+  display: flex;
 }
 </style>

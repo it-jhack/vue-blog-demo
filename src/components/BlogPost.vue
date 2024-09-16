@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useBlogStore } from '../stores/useBlogStore'
 
@@ -29,7 +29,15 @@ const route = useRoute()
 const router = useRouter()
 const blogStore = useBlogStore()
 
-const post = computed(() => blogStore.getPostById(route.params.postId))
+const post = computed(() =>
+  blogStore.blogPosts.find((p) => p.id === route.params.postId)
+)
+
+onMounted(() => {
+  if (!post.value) {
+    router.push({ name: 'blog' })
+  }
+})
 
 function goBack() {
   router.push({ name: 'blog' })

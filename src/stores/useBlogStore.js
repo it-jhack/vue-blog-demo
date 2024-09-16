@@ -33,10 +33,23 @@ export const useBlogStore = defineStore('blog', () => {
     return this.blogPosts.find((post) => post.id === id)
   }
 
+  function updatePost(updatedPost) {
+    const index = this.blogPosts.findIndex((post) => post.id === updatedPost.id)
+    if (index !== -1) {
+      this.blogPosts[index] = { ...this.blogPosts[index], ...updatedPost }
+    }
+  }
+
+  function deletePost(postId) {
+    this.blogPosts = this.blogPosts.filter((post) => post.id !== postId)
+  }
+
   return {
     blogPosts,
     createPost,
     formatDate,
     getPostById,
+    updatePost,
+    deletePost,
   }
 })
