@@ -136,6 +136,8 @@ function openDialog() {
 }
 
 function onSubmit() {
+  // IMPORTANT: When integrating with the backend, ensure all user input is sanitized
+  // to prevent security vulnerabilities such as cross-site scripting (XSS) attacks.
   blogStore.createPost({
     title: newPost.value.title,
     excerpt: newPost.value.excerpt,
@@ -152,6 +154,8 @@ function editPost(post) {
 }
 
 function onEditSubmit() {
+  // IMPORTANT: When integrating with the backend, ensure all user input is sanitized
+  // to prevent security vulnerabilities such as cross-site scripting (XSS) attacks.
   blogStore.updatePost(editingPost.value)
   showEditDialog.value = false
 }
