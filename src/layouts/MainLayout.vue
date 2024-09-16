@@ -1,15 +1,26 @@
 <template>
   <q-layout
     view="lHh lpR fFf"
-    :class="{ 'gradient-bg': true, 'gradient-bg-dark': isDark }"
+    :class="{
+      'gradient-bg': true,
+      'gradient-bg-dark': isDark,
+      'light-mode-text': !isDark,
+    }"
   >
     <q-header :class="{ transparent: true, 'q-py-sm': true }">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <q-btn
+          dense
+          flat
+          round
+          icon="menu"
+          @click="toggleLeftDrawer"
+          :class="{ 'text-white': isDark }"
+        />
 
         <q-toolbar-title>
           <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
+            <img :src="logoSrc" />
           </q-avatar>
         </q-toolbar-title>
 
@@ -18,8 +29,9 @@
         <q-btn
           flat
           round
-          :icon="isDark ? 'sym_o_dark_mode' : 'light_mode'"
+          :icon="isDark ? 'sym_o_dark_mode' : 'sym_o_light_mode'"
           @click="toggleDarkMode"
+          :class="{ 'text-white': isDark }"
         />
       </q-toolbar>
     </q-header>
@@ -66,7 +78,7 @@
 </template>
 
 <script>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useQuasar } from 'quasar'
 
 export default {
@@ -80,6 +92,12 @@ export default {
       $q.dark.set(isDark.value)
       localStorage.setItem('darkMode', isDark.value)
     }
+
+    const logoSrc = computed(() =>
+      isDark.value
+        ? 'https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg'
+        : 'https://cdn.quasar.dev/logo-v2/svg/logo-mono-black.svg'
+    )
 
     onMounted(() => {
       const storedDarkMode = localStorage.getItem('darkMode')
@@ -102,6 +120,7 @@ export default {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
       toggleDarkMode,
+      logoSrc, // Add this line
     }
   },
 }
@@ -109,25 +128,31 @@ export default {
 
 <style lang="scss">
 .gradient-bg {
-  background: linear-gradient(135deg, #6dd5ed, #2193b0);
+  background: linear-gradient(135deg, #e0f7fa, #80deea, #4dd0e1);
+  color: #0a192fce;
 }
 
 .gradient-bg-dark {
   background: linear-gradient(135deg, #141e30, #243b55);
+  color: #ffffff;
 }
 
 .q-header.transparent {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
+  color: #0a192fce;
+
+  .q-btn {
+    color: inherit;
+  }
 }
 
-.flat-drawer {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-}
-
-.flat-drawer-dark {
-  background: rgba(0, 0, 0, 0.8);
+body.body--light {
+  .q-header,
+  .q-drawer,
+  .q-footer {
+    color: #0a192fce;
+  }
 }
 
 // Add more custom styles here
