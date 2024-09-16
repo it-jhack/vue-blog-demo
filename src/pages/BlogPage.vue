@@ -16,7 +16,13 @@
       <p class="text-h5 text-center q-mt-lg">No articles yet</p>
     </div>
     <q-list v-else separator>
-      <q-item v-for="post in blogPosts" :key="post.id" clickable v-ripple>
+      <q-item
+        v-for="post in blogPosts"
+        :key="post.id"
+        clickable
+        v-ripple
+        class="blog-item q-mb-sm"
+      >
         <q-item-section>
           <q-item-label class="text-h6">{{ post.title }}</q-item-label>
           <q-item-label caption>{{ post.date }}</q-item-label>
@@ -93,5 +99,16 @@ function onSubmit() {
 .q-page {
   max-width: 800px;
   margin: 0 auto;
+}
+
+.blog-item {
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.blog-item:hover {
+  border-radius: 8px;
+  border-color: #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 </style>
