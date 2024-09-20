@@ -43,13 +43,23 @@
       bordered
       :class="{ 'flat-drawer': true, 'flat-drawer-dark': isDark }"
     >
-      <q-list class="q-mt-lg">
+      <q-list class="q-mt-lg q-gutter-y-sm">
         <q-item to="/" exact>
           <q-item-section avatar>
             <q-icon name="sym_o_home" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Home Page</q-item-label>
+            <q-item-label caption>About project tech stack</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item to="/blog-mock" exact>
+          <q-item-section avatar>
+            <q-icon name="sym_o_web_asset" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Blog Mock</q-item-label>
+            <q-item-label caption>Frontend only</q-item-label>
           </q-item-section>
         </q-item>
         <q-item to="/blog" exact>
@@ -57,7 +67,8 @@
             <q-icon name="sym_o_newsmode" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Blog (CRUD Example)</q-item-label>
+            <q-item-label>Blog</q-item-label>
+            <q-item-label caption>Full Stack Integration</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -112,13 +123,13 @@ export default {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
       toggleDarkMode,
-      logoSrc, // Add this line
+      logoSrc,
     }
   },
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .gradient-bg {
   background: linear-gradient(135deg, #e0f7fa, #80deea, #4dd0e1);
   color: #0a192fce;
@@ -147,5 +158,13 @@ body.body--light {
   }
 }
 
-// Add more custom styles here
+.q-item {
+  .q-item__label {
+    font-size: 1.1rem;
+  }
+
+  .q-item__label--caption {
+    font-size: 0.85rem;
+  }
+}
 </style>

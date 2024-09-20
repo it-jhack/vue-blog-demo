@@ -2,8 +2,8 @@
   <q-page padding>
     <div class="row items-start justify-between q-mb-md">
       <div class="col-grow">
-        <h3 class="q-my-none">Blog</h3>
-        <h6 class="q-my-sm">Fullstack Integration</h6>
+        <h3 class="q-my-none">Blog Mock</h3>
+        <h6 class="q-my-sm">Frontend only</h6>
       </div>
       <div class="col-auto" style="margin-top: 55px">
         <q-btn
