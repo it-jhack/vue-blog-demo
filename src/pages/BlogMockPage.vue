@@ -15,12 +15,12 @@
       </div>
     </div>
 
-    <div v-if="blogStore.blogPosts.length === 0">
+    <div v-if="blogMockStore.blogPosts.length === 0">
       <p class="text-h5 text-center q-mt-lg">No articles yet</p>
     </div>
     <q-list v-else separator>
       <q-item
-        v-for="post in blogStore.blogPosts"
+        v-for="post in blogMockStore.blogPosts"
         :key="post.id"
         clickable
         v-ripple
@@ -30,7 +30,7 @@
         <q-item-section>
           <q-item-label class="text-h6">{{ post.title }}</q-item-label>
           <q-item-label caption>
-            {{ blogStore.formatDate(post.date) }}
+            {{ blogMockStore.formatDate(post.date) }}
           </q-item-label>
           <q-item-label class="q-mt-sm">{{ post.excerpt }}</q-item-label>
         </q-item-section>
@@ -117,7 +117,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useBlogStore } from '../stores/useBlogStore'
+import { useBlogMockStore } from '../stores/useBlogMockStore'
 
 const showDialog = ref(false)
 const newPost = ref({
@@ -132,7 +132,7 @@ const editingPost = ref({})
 const postToDelete = ref(null)
 
 const router = useRouter()
-const blogStore = useBlogStore()
+const blogMockStore = useBlogMockStore()
 
 function openDialog() {
   showDialog.value = true
@@ -141,7 +141,7 @@ function openDialog() {
 function onSubmit() {
   // IMPORTANT: When integrating with the backend, ensure all user input is sanitized
   // to prevent security vulnerabilities such as cross-site scripting (XSS) attacks.
-  blogStore.createPost({
+  blogMockStore.createPost({
     title: newPost.value.title,
     excerpt: newPost.value.excerpt,
     content: newPost.value.content,
@@ -159,7 +159,7 @@ function editPost(post) {
 function onEditSubmit() {
   // IMPORTANT: When integrating with the backend, ensure all user input is sanitized
   // to prevent security vulnerabilities such as cross-site scripting (XSS) attacks.
-  blogStore.updatePost(editingPost.value)
+  blogMockStore.updatePost(editingPost.value)
   showEditDialog.value = false
 }
 
@@ -170,13 +170,13 @@ function confirmDelete(post) {
 
 function deletePost() {
   if (postToDelete.value) {
-    blogStore.deletePost(postToDelete.value.id)
+    blogMockStore.deletePost(postToDelete.value.id)
     postToDelete.value = null
   }
 }
 
 function goToPost(postId) {
-  router.push({ name: 'blogPost', params: { postId } })
+  router.push({ name: 'blogPostMock', params: { postId } })
 }
 </script>
 
