@@ -3,7 +3,7 @@
     <div v-if="post">
       <h1 class="text-h3 q-mb-md">{{ post.title }}</h1>
       <p class="text-subtitle1 q-mb-lg">
-        {{ blogStore.formatDate(post.date) }}
+        {{ formatDate(post.date) }}
       </p>
       <div v-html="post.content"></div>
     </div>
@@ -24,13 +24,18 @@
 import { onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useBlogStore } from '../stores/useBlogStore'
+import { storeToRefs } from 'pinia'
 
 const route = useRoute()
 const router = useRouter()
 const blogStore = useBlogStore()
 
+const { formatDate } = blogStore
+
+const { blogPosts } = storeToRefs(blogStore)
+
 const post = computed(() =>
-  blogStore.blogPosts.find((p) => p.id === route.params.postId)
+  blogPosts.value.find((p) => p.id === route.params.postId)
 )
 
 onMounted(() => {

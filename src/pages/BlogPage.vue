@@ -15,12 +15,12 @@
       </div>
     </div>
 
-    <div v-if="blogStore.blogPosts.length === 0">
+    <div v-if="articles.length === 0">
       <p class="text-h5 text-center q-mt-lg">No articles yet</p>
     </div>
     <q-list v-else separator>
       <q-item
-        v-for="post in blogStore.blogPosts"
+        v-for="post in articles"
         :key="post.id"
         clickable
         v-ripple
@@ -30,7 +30,7 @@
         <q-item-section>
           <q-item-label class="text-h6">{{ post.title }}</q-item-label>
           <q-item-label caption>
-            {{ blogStore.formatDate(post.date) }}
+            {{ formatDate(post.date) }}
           </q-item-label>
           <q-item-label class="q-mt-sm">{{ post.excerpt }}</q-item-label>
         </q-item-section>
@@ -105,7 +105,7 @@
             flat
             label="Delete"
             color="negative"
-            @click="deletePost"
+            @click="deleteArticleHandler"
             v-close-popup
           />
         </q-card-actions>
@@ -115,9 +115,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBlogStore } from '../stores/useBlogStore'
+import { storeToRefs } from 'pinia'
 
 const showDialog = ref(false)
 const newPost = ref({
@@ -134,14 +135,25 @@ const postToDelete = ref(null)
 const router = useRouter()
 const blogStore = useBlogStore()
 
+onMounted(() => {
+  fetchArticles()
+})
+
+const { articles, isLoading, isError, error } = storeToRefs(blogStore)
+const {
+  fetchArticles,
+  createArticle,
+  updateArticle,
+  deleteArticle,
+  formatDate,
+} = blogStore
+
 function openDialog() {
   showDialog.value = true
 }
 
 function onSubmit() {
-  // IMPORTANT: When integrating with the backend, ensure all user input is sanitized
-  // to prevent security vulnerabilities such as cross-site scripting (XSS) attacks.
-  blogStore.createPost({
+  createArticle({
     title: newPost.value.title,
     excerpt: newPost.value.excerpt,
     content: newPost.value.content,
@@ -157,9 +169,7 @@ function editPost(post) {
 }
 
 function onEditSubmit() {
-  // IMPORTANT: When integrating with the backend, ensure all user input is sanitized
-  // to prevent security vulnerabilities such as cross-site scripting (XSS) attacks.
-  blogStore.updatePost(editingPost.value)
+  updateArticle(editingPost.value)
   showEditDialog.value = false
 }
 
@@ -168,9 +178,9 @@ function confirmDelete(post) {
   showDeleteDialog.value = true
 }
 
-function deletePost() {
+function deleteArticleHandler() {
   if (postToDelete.value) {
-    blogStore.deletePost(postToDelete.value.id)
+    deleteArticle(postToDelete.value.id)
     postToDelete.value = null
   }
 }

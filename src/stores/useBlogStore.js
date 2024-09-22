@@ -1,55 +1,94 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import axios from 'axios'
 
-export const useBlogStore = defineStore('blog', () => {
-  const blogPosts = ref([])
+import { formatDate } from '../helpers/date-helper'
 
-  function generateId(title) {
-    const timestamp = Date.now().toString(36)
-    const randomStr = Math.random().toString(36).substring(2, 7)
-    const sanitizedTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-    return `${timestamp}-${randomStr}-${sanitizedTitle}`
-  }
+const BASE_URL = 'http://127.0.0.1:5001/fireb-blog-demo-90bef/us-central1'
 
-  function createPost(post) {
-    blogPosts.value.push({
-      id: generateId(post.title),
-      title: post.title,
-      excerpt: post.excerpt,
-      content: post.content,
-      date: new Date().toISOString(),
-    })
-  }
+export const useBlogStore = defineStore('blog', {
+  state: () => ({
+    articles: [],
+    currentArticle: null,
+    isLoading: false,
+    isError: false,
+    error: null,
+  }),
 
-  function formatDate(isoDate) {
-    return new Date(isoDate).toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    })
-  }
+  actions: {
+    formatDate(date) {
+      return formatDate(date)
+    },
 
-  function getPostById(id) {
-    return this.blogPosts.find((post) => post.id === id)
-  }
+    startLoadingState() {
+      this.isLoading = true
+      this.isError = false
+      this.error = null
+    },
 
-  function updatePost(updatedPost) {
-    const index = this.blogPosts.findIndex((post) => post.id === updatedPost.id)
-    if (index !== -1) {
-      this.blogPosts[index] = { ...this.blogPosts[index], ...updatedPost }
-    }
-  }
+    async fetchArticles() {
+      this.startLoadingState()
+      try {
+        const response = await axios.get(`${BASE_URL}/get_articles`)
+        this.articles = response.data
+      } catch (error) {
+        this.error = error.message
+        this.isError = true
+      } finally {
+        this.isLoading = false
+        console.info('articles', this.articles)
+      }
+    },
 
-  function deletePost(postId) {
-    this.blogPosts = this.blogPosts.filter((post) => post.id !== postId)
-  }
+    async fetchArticle(id) {
+      this.startLoadingState()
+      try {
+        const response = await axios.get(`${BASE_URL}/get_articles?id=${id}`)
+        this.currentArticle = response.data
+      } catch (error) {
+        this.error = error.message
+        this.isError = true
+      } finally {
+        this.isLoading = false
+      }
+    },
 
-  return {
-    blogPosts,
-    createPost,
-    formatDate,
-    getPostById,
-    updatePost,
-    deletePost,
-  }
+    async createArticle(articleData) {
+      this.startLoadingState()
+      try {
+        await axios.post(`${BASE_URL}/create_article`, articleData)
+        await this.fetchArticles()
+      } catch (error) {
+        this.error = error.message
+        this.isError = true
+      } finally {
+        this.isLoading = false
+      }
+    },
+
+    async updateArticle(id, articleData) {
+      this.startLoadingState()
+      try {
+        await axios.put(`${BASE_URL}/update_article?id=${id}`, articleData)
+        await this.fetchArticles()
+      } catch (error) {
+        this.error = error.message
+        this.isError = true
+      } finally {
+        this.isLoading = false
+      }
+    },
+
+    async deleteArticle(id) {
+      this.startLoadingState()
+      try {
+        await axios.delete(`${BASE_URL}/delete_article?id=${id}`)
+        await this.fetchArticles()
+      } catch (error) {
+        this.error = error.message
+        this.isError = true
+      } finally {
+        this.isLoading = false
+      }
+    },
+  },
 })
