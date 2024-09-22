@@ -30,7 +30,7 @@
         <q-item-section>
           <q-item-label class="text-h6">{{ post.title }}</q-item-label>
           <q-item-label caption>
-            {{ formatDate(post.date) }}
+            {{ formatDate(post.publishedAt) }} | By {{ post.author }}
           </q-item-label>
           <q-item-label class="q-mt-sm">{{ post.excerpt }}</q-item-label>
         </q-item-section>
@@ -50,6 +50,7 @@
         <q-card-section>
           <q-form @submit="onSubmit" class="q-gutter-md">
             <q-input v-model="newPost.title" label="Title" required />
+            <q-input v-model="newPost.author" label="Author" required />
             <q-input v-model="newPost.excerpt" label="Excerpt" required />
             <q-editor
               v-model="newPost.content"
@@ -75,6 +76,7 @@
         <q-card-section>
           <q-form @submit="onEditSubmit" class="q-gutter-md">
             <q-input v-model="editingPost.title" label="Title" required />
+            <q-input v-model="editingPost.author" label="Author" required />
             <q-input v-model="editingPost.excerpt" label="Excerpt" required />
             <q-editor
               v-model="editingPost.content"
@@ -123,6 +125,7 @@ import { storeToRefs } from 'pinia'
 const showDialog = ref(false)
 const newPost = ref({
   title: '',
+  author: '',
   excerpt: '',
   content: '',
 })
@@ -155,12 +158,13 @@ function openDialog() {
 function onSubmit() {
   createArticle({
     title: newPost.value.title,
+    author: newPost.value.author,
     excerpt: newPost.value.excerpt,
     content: newPost.value.content,
   })
 
   showDialog.value = false
-  newPost.value = { title: '', excerpt: '', content: '' }
+  newPost.value = { title: '', author: '', excerpt: '', content: '' }
 }
 
 function editPost(post) {

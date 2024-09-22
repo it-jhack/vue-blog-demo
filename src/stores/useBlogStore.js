@@ -43,7 +43,12 @@ export const useBlogStore = defineStore('blog', {
       this.startLoadingState()
       try {
         const response = await axios.get(`${BASE_URL}/get_articles?id=${id}`)
-        this.currentArticle = response.data
+        if (response.data.length > 0) {
+          this.currentArticle = response.data[0]
+        } else {
+          this.error = 'Article not found'
+          this.isError = true
+        }
       } catch (error) {
         this.error = error.message
         this.isError = true

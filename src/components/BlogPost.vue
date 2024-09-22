@@ -3,7 +3,7 @@
     <div v-if="post">
       <h1 class="text-h3 q-mb-md">{{ post.title }}</h1>
       <p class="text-subtitle1 q-mb-lg">
-        {{ formatDate(post.date) }}
+        {{ formatDate(post.publishedAt) }}
       </p>
       <div v-html="post.content"></div>
     </div>
