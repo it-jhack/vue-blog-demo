@@ -1,52 +1,51 @@
 <template>
-  <q-page padding>
-    <div v-if="post">
-      <h1 class="text-h3 q-mb-md">{{ post.title }}</h1>
-      <p class="text-subtitle1 q-mb-lg">
-        {{ formatDate(post.publishedAt) }}
+  <q-page class="q-pa-md">
+    <div v-if="isLoading">
+      <q-spinner color="primary" size="3em" />
+    </div>
+    <div v-else-if="isError">
+      <q-banner class="bg-negative text-white">
+        {{ error }}
+      </q-banner>
+    </div>
+    <div v-else-if="currentArticle">
+      <h1 class="text-h3 q-mb-md">{{ currentArticle.title }}</h1>
+      <p class="text-subtitle1 q-mb-sm">By {{ currentArticle.author }}</p>
+      <p class="text-caption q-mb-lg">
+        {{ formatDate(currentArticle.publishedAt) }}
       </p>
-      <div v-html="post.content"></div>
+      <q-separator class="q-mb-lg" />
+      <div class="content q-mb-xl" v-html="currentArticle.content"></div>
     </div>
     <div v-else>
-      <p class="text-h5 text-center">Post not found</p>
+      <q-banner class="bg-warning text-white"> Article not found </q-banner>
     </div>
     <q-btn
       color="primary"
-      label="Back to Blog"
+      label="Go Back"
       icon="arrow_back"
-      class="q-mt-lg"
-      @click="goBack"
+      @click="$router.go(-1)"
+      class="q-mb-md"
     />
   </q-page>
 </template>
 
 <script setup>
-import { onMounted, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useBlogStore } from '../stores/useBlogStore'
+import { onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
+import { useBlogStore } from '../stores/useBlogStore'
 
 const route = useRoute()
-const router = useRouter()
 const blogStore = useBlogStore()
 
-const { formatDate } = blogStore
+const { currentArticle, isLoading, isError, error } = storeToRefs(blogStore)
+const { fetchArticle, formatDate } = blogStore
 
-const { blogPosts } = storeToRefs(blogStore)
-
-const post = computed(() =>
-  blogPosts.value.find((p) => p.id === route.params.postId)
-)
-
-onMounted(() => {
-  if (!post.value) {
-    router.push({ name: 'blog' })
-  }
+onMounted(async () => {
+  const postId = route.params.postId
+  await fetchArticle(postId)
 })
-
-function goBack() {
-  router.push({ name: 'blog' })
-}
 </script>
 
 <style scoped>

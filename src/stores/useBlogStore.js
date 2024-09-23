@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import { formatDate } from '../helpers/date-helper'
 
-const BASE_URL = 'http://127.0.0.1:5001/fireb-blog-demo-90bef/us-central1'
+const BASE_URL = import.meta.env.BASE_URL
 
 export const useBlogStore = defineStore('blog', {
   state: () => ({
@@ -35,7 +35,6 @@ export const useBlogStore = defineStore('blog', {
         this.isError = true
       } finally {
         this.isLoading = false
-        console.info('articles', this.articles)
       }
     },
 
@@ -43,8 +42,8 @@ export const useBlogStore = defineStore('blog', {
       this.startLoadingState()
       try {
         const response = await axios.get(`${BASE_URL}/get_articles?id=${id}`)
-        if (response.data.length > 0) {
-          this.currentArticle = response.data[0]
+        if (response.data) {
+          this.currentArticle = response.data
         } else {
           this.error = 'Article not found'
           this.isError = true

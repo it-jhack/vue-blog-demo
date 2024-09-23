@@ -173,7 +173,7 @@ function editPost(post) {
 }
 
 function onEditSubmit() {
-  updateArticle(editingPost.value)
+  updateArticle(editingPost.value.id, editingPost.value)
   showEditDialog.value = false
 }
 
