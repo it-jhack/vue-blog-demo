@@ -18,12 +18,6 @@
           :class="{ 'text-white': isDark }"
         />
 
-        <q-toolbar-title>
-          <q-avatar>
-            <img :src="logoSrc" />
-          </q-avatar>
-        </q-toolbar-title>
-
         <q-space />
 
         <q-btn
