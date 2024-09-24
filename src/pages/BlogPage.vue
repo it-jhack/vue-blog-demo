@@ -15,8 +15,14 @@
       </div>
     </div>
 
-    <div v-if="articles.length === 0">
+    <div v-if="isLoadingArticles" class="row justify-center q-mt-xl">
+      <q-spinner color="primary" size="3em" :thickness="2" />
+    </div>
+    <div v-else-if="isEmptyArticles">
       <p class="text-h5 text-center q-mt-lg">No articles yet</p>
+    </div>
+    <div v-else-if="isErrorArticles">
+      <p class="text-h5 text-center q-mt-lg">Some error occurred :/</p>
     </div>
     <q-list v-else separator>
       <q-item
@@ -24,15 +30,15 @@
         :key="post.id"
         clickable
         v-ripple
-        class="blog-item"
+        class="blog-item q-py-lg"
         @click="goToPost(post.id)"
       >
         <q-item-section>
-          <q-item-label class="text-h6">{{ post.title }}</q-item-label>
-          <q-item-label caption>
+          <q-item-label class="text-h6 q-mt-md">{{ post.title }}</q-item-label>
+          <q-item-label caption class="q-py-sm">
             {{ formatDate(post.publishedAt) }} | By {{ post.author }}
           </q-item-label>
-          <q-item-label class="q-mt-sm">{{ post.excerpt }}</q-item-label>
+          <q-item-label class="q-mb-md">{{ post.excerpt }}</q-item-label>
         </q-item-section>
         <q-item-section side class="action-buttons">
           <q-btn flat round icon="edit" @click.stop="editPost(post)" />
@@ -142,7 +148,9 @@ onMounted(() => {
   fetchArticles()
 })
 
-const { articles, isLoading, isError, error } = storeToRefs(blogStore)
+const { articles, isLoadingArticles, isEmptyArticles, isErrorArticles } =
+  storeToRefs(blogStore)
+
 const {
   fetchArticles,
   createArticle,
