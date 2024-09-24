@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainLayout from './layouts/MainLayout.vue'
 import HomePage from './pages/HomePage.vue'
+import BlogMockPage from './pages/BlogMockPage.vue'
+import BlogPostMock from './components/BlogPostMock.vue'
 import BlogPage from './pages/BlogPage.vue'
 import BlogPost from './components/BlogPost.vue'
 
@@ -13,6 +15,17 @@ const routes = [
         path: '',
         name: 'home',
         component: HomePage,
+      },
+      {
+        path: 'blog-mock',
+        name: 'blogMock',
+        component: BlogMockPage,
+      },
+      {
+        path: 'blog-mock/:postId',
+        name: 'blogPostMock',
+        component: BlogPostMock,
+        props: true,
       },
       {
         path: 'blog',

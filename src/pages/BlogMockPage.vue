@@ -2,8 +2,8 @@
   <q-page padding>
     <div class="row items-start justify-between q-mb-md">
       <div class="col-grow">
-        <h3 class="q-my-none">Blog</h3>
-        <h6 class="q-my-sm">Fullstack Integration</h6>
+        <h3 class="q-my-none">Blog Mock</h3>
+        <h6 class="q-my-sm">Frontend only</h6>
       </div>
       <div class="col-auto" style="margin-top: 55px">
         <q-btn
@@ -15,12 +15,12 @@
       </div>
     </div>
 
-    <div v-if="articles.length === 0">
+    <div v-if="blogMockStore.blogPosts.length === 0">
       <p class="text-h5 text-center q-mt-lg">No articles yet</p>
     </div>
     <q-list v-else separator>
       <q-item
-        v-for="post in articles"
+        v-for="post in blogMockStore.blogPosts"
         :key="post.id"
         clickable
         v-ripple
@@ -30,7 +30,7 @@
         <q-item-section>
           <q-item-label class="text-h6">{{ post.title }}</q-item-label>
           <q-item-label caption>
-            {{ formatDate(post.publishedAt) }} | By {{ post.author }}
+            {{ blogMockStore.formatDate(post.date) }}
           </q-item-label>
           <q-item-label class="q-mt-sm">{{ post.excerpt }}</q-item-label>
         </q-item-section>
@@ -50,7 +50,6 @@
         <q-card-section>
           <q-form @submit="onSubmit" class="q-gutter-md">
             <q-input v-model="newPost.title" label="Title" required />
-            <q-input v-model="newPost.author" label="Author" required />
             <q-input v-model="newPost.excerpt" label="Excerpt" required />
             <q-editor
               v-model="newPost.content"
@@ -76,7 +75,6 @@
         <q-card-section>
           <q-form @submit="onEditSubmit" class="q-gutter-md">
             <q-input v-model="editingPost.title" label="Title" required />
-            <q-input v-model="editingPost.author" label="Author" required />
             <q-input v-model="editingPost.excerpt" label="Excerpt" required />
             <q-editor
               v-model="editingPost.content"
@@ -107,7 +105,7 @@
             flat
             label="Delete"
             color="negative"
-            @click="deleteArticleHandler"
+            @click="deletePost"
             v-close-popup
           />
         </q-card-actions>
@@ -117,15 +115,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useBlogStore } from '../stores/useBlogStore'
-import { storeToRefs } from 'pinia'
+import { useBlogMockStore } from '../stores/useBlogMockStore'
 
 const showDialog = ref(false)
 const newPost = ref({
   title: '',
-  author: '',
   excerpt: '',
   content: '',
 })
@@ -136,35 +132,23 @@ const editingPost = ref({})
 const postToDelete = ref(null)
 
 const router = useRouter()
-const blogStore = useBlogStore()
-
-onMounted(() => {
-  fetchArticles()
-})
-
-const { articles, isLoading, isError, error } = storeToRefs(blogStore)
-const {
-  fetchArticles,
-  createArticle,
-  updateArticle,
-  deleteArticle,
-  formatDate,
-} = blogStore
+const blogMockStore = useBlogMockStore()
 
 function openDialog() {
   showDialog.value = true
 }
 
 function onSubmit() {
-  createArticle({
+  // IMPORTANT: When integrating with the backend, ensure all user input is sanitized
+  // to prevent security vulnerabilities such as cross-site scripting (XSS) attacks.
+  blogMockStore.createPost({
     title: newPost.value.title,
-    author: newPost.value.author,
     excerpt: newPost.value.excerpt,
     content: newPost.value.content,
   })
 
   showDialog.value = false
-  newPost.value = { title: '', author: '', excerpt: '', content: '' }
+  newPost.value = { title: '', excerpt: '', content: '' }
 }
 
 function editPost(post) {
@@ -173,7 +157,9 @@ function editPost(post) {
 }
 
 function onEditSubmit() {
-  updateArticle(editingPost.value.id, editingPost.value)
+  // IMPORTANT: When integrating with the backend, ensure all user input is sanitized
+  // to prevent security vulnerabilities such as cross-site scripting (XSS) attacks.
+  blogMockStore.updatePost(editingPost.value)
   showEditDialog.value = false
 }
 
@@ -182,15 +168,15 @@ function confirmDelete(post) {
   showDeleteDialog.value = true
 }
 
-function deleteArticleHandler() {
+function deletePost() {
   if (postToDelete.value) {
-    deleteArticle(postToDelete.value.id)
+    blogMockStore.deletePost(postToDelete.value.id)
     postToDelete.value = null
   }
 }
 
 function goToPost(postId) {
-  router.push({ name: 'blogPost', params: { postId } })
+  router.push({ name: 'blogPostMock', params: { postId } })
 }
 </script>
 
