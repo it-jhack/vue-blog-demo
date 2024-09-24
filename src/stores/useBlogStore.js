@@ -7,9 +7,10 @@ export const useBlogStore = defineStore('blog', {
   state: () => ({
     articles: [],
     currentArticle: null,
-    isLoading: false,
-    isError: false,
-    error: null,
+    isLoadingArticles: false,
+    isEmptyArticles: false,
+    isErrorArticles: false,
+    errorMessage: null,
   }),
 
   actions: {
@@ -18,9 +19,10 @@ export const useBlogStore = defineStore('blog', {
     },
 
     startLoadingState() {
-      this.isLoading = true
-      this.isError = false
-      this.error = null
+      this.isLoadingArticles = true
+      this.isEmptyArticles = false
+      this.isErrorArticles = false
+      this.errorMessage = null
     },
 
     async fetchArticles() {
@@ -28,11 +30,12 @@ export const useBlogStore = defineStore('blog', {
       try {
         const response = await axios.get(apiConfig.getArticlesUrl())
         this.articles = response.data
+        this.isEmptyArticles = this.articles.length === 0
       } catch (error) {
-        this.error = error.message
-        this.isError = true
+        this.errorMessage = error.message
+        this.isErrorArticles = true
       } finally {
-        this.isLoading = false
+        this.isLoadingArticles = false
       }
     },
 
@@ -43,14 +46,14 @@ export const useBlogStore = defineStore('blog', {
         if (response.data) {
           this.currentArticle = response.data
         } else {
-          this.error = 'Article not found'
-          this.isError = true
+          this.errorMessage = 'Article not found'
+          this.isErrorArticles = true
         }
       } catch (error) {
-        this.error = error.message
-        this.isError = true
+        this.errorMessage = error.message
+        this.isErrorArticles = true
       } finally {
-        this.isLoading = false
+        this.isLoadingArticles = false
       }
     },
 
@@ -60,10 +63,10 @@ export const useBlogStore = defineStore('blog', {
         await axios.post(apiConfig.createArticleUrl(), articleData)
         await this.fetchArticles()
       } catch (error) {
-        this.error = error.message
-        this.isError = true
+        this.errorMessage = error.message
+        this.isErrorArticles = true
       } finally {
-        this.isLoading = false
+        this.isLoadingArticles = false
       }
     },
 
@@ -73,10 +76,10 @@ export const useBlogStore = defineStore('blog', {
         await axios.put(apiConfig.updateArticleUrl(id), articleData)
         await this.fetchArticles()
       } catch (error) {
-        this.error = error.message
-        this.isError = true
+        this.errorMessage = error.message
+        this.isErrorArticles = true
       } finally {
-        this.isLoading = false
+        this.isLoadingArticles = false
       }
     },
 
@@ -86,10 +89,10 @@ export const useBlogStore = defineStore('blog', {
         await axios.delete(apiConfig.deleteArticleUrl(id))
         await this.fetchArticles()
       } catch (error) {
-        this.error = error.message
-        this.isError = true
+        this.errorMessage = error.message
+        this.isErrorArticles = true
       } finally {
-        this.isLoading = false
+        this.isLoadingArticles = false
       }
     },
   },

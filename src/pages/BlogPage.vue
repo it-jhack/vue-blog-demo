@@ -15,8 +15,14 @@
       </div>
     </div>
 
-    <div v-if="articles.length === 0">
+    <div v-if="isLoadingArticles">
+      <q-spinner color="primary" size="3em" :thickness="2" />
+    </div>
+    <div v-else-if="isEmptyArticles">
       <p class="text-h5 text-center q-mt-lg">No articles yet</p>
+    </div>
+    <div v-else-if="isErrorArticles">
+      <p class="text-h5 text-center q-mt-lg">Some error occurred :/</p>
     </div>
     <q-list v-else separator>
       <q-item
@@ -142,7 +148,9 @@ onMounted(() => {
   fetchArticles()
 })
 
-const { articles, isLoading, isError, error } = storeToRefs(blogStore)
+const { articles, isLoadingArticles, isEmptyArticles, isErrorArticles } =
+  storeToRefs(blogStore)
+
 const {
   fetchArticles,
   createArticle,
