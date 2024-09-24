@@ -1,6 +1,6 @@
 <template>
   <q-layout
-    view="lHh lpR fFf"
+    view="lHh Lpr Fff"
     :class="{
       'gradient-bg': true,
       'gradient-bg-dark': isDark,
@@ -35,6 +35,7 @@
       show-if-above
       side="left"
       bordered
+      fixed
       :class="{ 'flat-drawer': true, 'flat-drawer-dark': isDark }"
     >
       <q-list class="q-mt-lg q-gutter-y-sm">
