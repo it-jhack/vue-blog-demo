@@ -40,9 +40,16 @@
           </q-item-label>
           <q-item-label class="q-mb-md">{{ post.excerpt }}</q-item-label>
         </q-item-section>
-        <q-item-section side class="action-buttons">
+        <q-item-section
+          v-if="post.id !== 'St4Ixk28b3R7SO57alTS'"
+          side
+          class="action-buttons"
+        >
           <q-btn flat round icon="edit" @click.stop="editPost(post)" />
           <q-btn flat round icon="delete" @click.stop="confirmDelete(post)" />
+        </q-item-section>
+        <q-item-section v-else side class="action-buttons">
+          <q-icon name="sym_o_keep" />
         </q-item-section>
       </q-item>
     </q-list>
