@@ -39,12 +39,19 @@ Powered by Pinia for smooth data flow. Because juggling state shouldn't be a cir
    ```
    cd [project-directory]
    ```
-3. Install dependencies:
+3. Install dependencies using Node 20:
+
    ```
    npm install
    # or
    yarn install
    ```
+
+4. Create a `.env` file in the project's root directory and add the following:
+
+```
+NODE_ENV=development
+```
 
 ### Running the Project
 

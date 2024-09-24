@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-
 import { formatDate } from '../helpers/date-helper'
-
-const BASE_URL = import.meta.env.BASE_URL
+import { apiConfig } from '../../api-config.js'
 
 export const useBlogStore = defineStore('blog', {
   state: () => ({
@@ -28,7 +26,7 @@ export const useBlogStore = defineStore('blog', {
     async fetchArticles() {
       this.startLoadingState()
       try {
-        const response = await axios.get(`${BASE_URL}/get_articles`)
+        const response = await axios.get(apiConfig.getArticlesUrl())
         this.articles = response.data
       } catch (error) {
         this.error = error.message
@@ -41,7 +39,7 @@ export const useBlogStore = defineStore('blog', {
     async fetchArticle(id) {
       this.startLoadingState()
       try {
-        const response = await axios.get(`${BASE_URL}/get_articles?id=${id}`)
+        const response = await axios.get(apiConfig.getArticlesUrl(id))
         if (response.data) {
           this.currentArticle = response.data
         } else {
@@ -59,7 +57,7 @@ export const useBlogStore = defineStore('blog', {
     async createArticle(articleData) {
       this.startLoadingState()
       try {
-        await axios.post(`${BASE_URL}/create_article`, articleData)
+        await axios.post(apiConfig.createArticleUrl(), articleData)
         await this.fetchArticles()
       } catch (error) {
         this.error = error.message
@@ -72,7 +70,7 @@ export const useBlogStore = defineStore('blog', {
     async updateArticle(id, articleData) {
       this.startLoadingState()
       try {
-        await axios.put(`${BASE_URL}/update_article?id=${id}`, articleData)
+        await axios.put(apiConfig.updateArticleUrl(id), articleData)
         await this.fetchArticles()
       } catch (error) {
         this.error = error.message
@@ -85,7 +83,7 @@ export const useBlogStore = defineStore('blog', {
     async deleteArticle(id) {
       this.startLoadingState()
       try {
-        await axios.delete(`${BASE_URL}/delete_article?id=${id}`)
+        await axios.delete(apiConfig.deleteArticleUrl(id))
         await this.fetchArticles()
       } catch (error) {
         this.error = error.message
